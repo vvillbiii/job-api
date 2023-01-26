@@ -6,7 +6,7 @@ const { PORT = 3000 } = process.env;
 // Import routers
 const jobs = require("../job-api/routes/jobs");
 
-app.use(jobs);
+app.use("/api/v1", jobs);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on ${PORT}`);
