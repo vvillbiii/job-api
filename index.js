@@ -1,11 +1,13 @@
 const express = require("express");
 const app = express();
-const dotenv = require("dotenv");
+require("dotenv").config;
+const { PORT = 3000 } = process.env;
 
-// Setting up config.env
-dotenv.config({ path: "./config/config.env" });
+// Import routers
+const jobs = require("../job-api/routes/jobs");
 
-const PORT = process.env.PORT;
+app.use(jobs);
+
 app.listen(PORT, () => {
-  console.log(`Server is listening on ${PORT} in ${process.env.NODE_ENV}`);
+  console.log(`Server is listening on ${PORT}`);
 });
