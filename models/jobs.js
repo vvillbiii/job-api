@@ -85,6 +85,7 @@ const jobSchema = new Schema({
   },
   applicantsApplied: {
     type: [Object],
+    //hiding from user
     select: false,
   },
 });
