@@ -50,4 +50,44 @@ const jobSchema = new Schema({
       message: "Please select correct options for job type.",
     },
   },
+  minEducation: {
+    type: String,
+    required: true,
+    enum: {
+      value: ["Bachelors", "Masters", "PhD"],
+      message: "Please select correct options  for education",
+    },
+  },
+  poisitions: {
+    type: Number,
+    default: 1,
+  },
+  experience: {
+    type: String,
+    required: true,
+    enum: {
+      values: ["No Experience", "1 - 2 years", "2-5 years", "5+ years"],
+      message: "Please select correct option for Experience.",
+    },
+  },
+  salary: {
+    type: Number,
+    required: [true, "PLease eneter expected salary for this job."],
+  },
+  postingDate: {
+    type: Date,
+    default: Date.now,
+  },
+  lastDate: {
+    type: Date,
+    default: new Date().setDate(new Date().getDate() + 7),
+  },
+  applicantsApplied: {
+    type: [Object],
+    select: false,
+  },
 });
+
+const Job = mongoose.model("Job", jobSchema);
+
+module.exports = Job;
