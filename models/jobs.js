@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const validator = require("validator");
+const slugify = require("slugify");
 
 const jobSchema = new Schema({
   title: {
@@ -86,6 +87,14 @@ const jobSchema = new Schema({
     type: [Object],
     select: false,
   },
+});
+
+//creating job slug
+jobSchema.pre("save", function (next) {
+  // saving slug to database
+  this.slug = slugify(this.title, { lower: true });
+
+  next();
 });
 
 const Job = mongoose.model("Job", jobSchema);
