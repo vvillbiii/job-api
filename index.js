@@ -7,6 +7,9 @@ const PORT = process.env.PORT;
 //DB CONNECTION
 const dbConnection = require("../job-api/config/database");
 
+// setup body parser
+app.use(express.json());
+
 // Import routers
 const jobs = require("../job-api/routes/jobs");
 

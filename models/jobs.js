@@ -54,11 +54,11 @@ const jobSchema = new Schema({
     type: String,
     required: true,
     enum: {
-      value: ["Bachelors", "Masters", "PhD"],
-      message: "Please select correct options  for education",
+      values: ["Bachelors", "Masters", "PhD"],
+      message: "Please select correct options  for education.",
     },
   },
-  poisitions: {
+  positions: {
     type: Number,
     default: 1,
   },
@@ -72,7 +72,7 @@ const jobSchema = new Schema({
   },
   salary: {
     type: Number,
-    required: [true, "PLease eneter expected salary for this job."],
+    required: [true, "Please eneter expected salary for this job."],
   },
   postingDate: {
     type: Date,
