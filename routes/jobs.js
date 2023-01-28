@@ -13,7 +13,7 @@ const {
 
 router.route("/jobs").get(getJobs);
 
-router.route("/jobs/:id").get(getJob);
+router.route("/jobs/:id/:slug").get(getJob);
 router.route("/jobs/:zipcode/:distance").get(getJobsInRadius);
 router.route("/jobs/new").post(newJob);
 
