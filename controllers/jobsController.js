@@ -25,6 +25,30 @@ exports.newJob = async (req, res, next) => {
   });
 };
 
+// updating a job => /api/v1/jobs/:id
+exports.updateJob = async (req, res, next) => {
+  const id = req.params.id;
+  let job = await Job.findById(id);
+
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      message: "Job not found.",
+    });
+  }
+
+  job = await Job.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "job is updated.",
+    data: job,
+  });
+};
+
 //serach jobs with radius => /api/v1/jobs/:zipcode/:distance
 exports.getJobsInRadius = async (req, res, next) => {
   const { zipcode, distance } = req.params;
