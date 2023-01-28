@@ -1,4 +1,3 @@
-const { json } = require("express");
 const Job = require("../models/jobs");
 const geoCoder = require("../utils/geocoder");
 
@@ -14,7 +13,7 @@ exports.getJobs = async (req, res, next) => {
   });
 };
 
-// create a new jb  => /api/v1/jobs/new
+// create a new job  => /api/v1/jobs/new
 exports.newJob = async (req, res, next) => {
   const job = await Job.create(req.body);
 
@@ -25,6 +24,24 @@ exports.newJob = async (req, res, next) => {
   });
 };
 
+// get a single job with id and slug => /api/v1/jobs/:id/slug
+exports.getJob = async (req, res, next) => {
+  const id = req.params.id;
+  const slug = req.params.slug;
+  const job = await Job.find({ $and: [{ _id: id }, { slug: slug }] });
+
+  if (!job || job.length === 0) {
+    return res.status(404).json({
+      success: false,
+      message: "Job not found.",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    data: job,
+  });
+};
 // updating a job => /api/v1/jobs/:id
 exports.updateJob = async (req, res, next) => {
   const id = req.params.id;

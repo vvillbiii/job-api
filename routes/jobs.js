@@ -4,6 +4,7 @@ const router = express.Router();
 //importing jobs controllers
 const {
   getJobs,
+  getJob,
   newJob,
   getJobsInRadius,
   updateJob,
@@ -11,6 +12,8 @@ const {
 } = require("../controllers/jobsController");
 
 router.route("/jobs").get(getJobs);
+
+router.route("/jobs/:id").get(getJob);
 router.route("/jobs/:zipcode/:distance").get(getJobsInRadius);
 router.route("/jobs/new").post(newJob);
 
