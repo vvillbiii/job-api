@@ -9,7 +9,7 @@ const {
 } = require("../controllers/jobsController");
 
 router.route("/jobs").get(getJobs);
-router.route("/jobs/:zipcode/:distnace").get(getJobsInRadius);
+router.route("/jobs/:zipcode/:distance").get(getJobsInRadius);
 router.route("/jobs/new").post(newJob);
 
 module.exports = router;
