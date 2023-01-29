@@ -3,6 +3,7 @@ const app = express();
 dotenv = require("dotenv");
 dotenv.config();
 const PORT = process.env.PORT;
+const errorHandler = require("./utils/errorHandler");
 
 //DB CONNECTION
 const dbConnection = require("./config/database");
@@ -22,6 +23,11 @@ app.use(express.json());
 const jobs = require("./routes/jobs");
 
 app.use("/api/v1", jobs);
+
+// handle unhandled routes
+app.all("*", (req, res, next) => {
+  next(new errorHandler(`${req.originalUrl} route not found`, 404));
+});
 
 // error middleware
 app.use(errorMiddleware);
