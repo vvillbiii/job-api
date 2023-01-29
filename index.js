@@ -19,6 +19,15 @@ app.use("/api/v1", jobs);
 // error middleware
 app.use(errorMiddleware);
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is listening on ${PORT}, on ${process.env.NODE_ENV}`);
+});
+
+// handling unhandled promise rejection
+process.on("unhandledRejection", (err) => {
+  console.log(`Error: ${err.message}`);
+  console.log("Shutting down the server due to unhandled promise rejection");
+  server.close(() => {
+    process.exit(1);
+  });
 });
