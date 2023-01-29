@@ -8,7 +8,7 @@ class APIFilter {
     const queryCopy = { ...this.queryStr };
 
     //removing fields from query
-    const removeFields = ["sort", "fields"];
+    const removeFields = ["sort", "fields", "q"];
     removeFields.forEach((el) => delete queryCopy[el]);
 
     // advance filter using: lt, lte, gt, gte
@@ -39,6 +39,15 @@ class APIFilter {
     } else {
       this.query = this.query.select("-__v");
     }
+  }
+
+  searchByQuery() {
+    if (this.queryStr.q) {
+      const qu = this.queryStr.q.split("-").join(" ");
+      this.query = this.query.find({ $text: { $search: "'" + qu + "'" } });
+    }
+
+    return this;
   }
 }
 
