@@ -46,7 +46,7 @@ const jobSchema = new Schema({
   },
   industry: {
     type: [String],
-    required: true,
+    required: [true, "Please enter industry for job."],
     enum: {
       values: [
         "Advertising",
@@ -61,7 +61,7 @@ const jobSchema = new Schema({
   },
   jobType: {
     type: String,
-    required: true,
+    required: [true, "Please enter job type."],
     enum: {
       values: ["Permanent", "Temporary", "Intership"],
       message: "Please select correct options for job type.",
@@ -69,7 +69,7 @@ const jobSchema = new Schema({
   },
   minEducation: {
     type: String,
-    required: true,
+    required: [true, "Please enter minimum education."],
     enum: {
       values: ["Bachelors", "Masters", "PhD"],
       message: "Please select correct options  for education.",
@@ -81,7 +81,7 @@ const jobSchema = new Schema({
   },
   experience: {
     type: String,
-    required: true,
+    required: [true, "Please enter experience required."],
     enum: {
       values: ["No Experience", "1 - 2 years", "2-5 years", "5+ years"],
       message: "Please select correct option for Experience.",
@@ -89,7 +89,7 @@ const jobSchema = new Schema({
   },
   salary: {
     type: Number,
-    required: [true, "Please eneter expected salary for this job."],
+    required: [true, "Please enter expected salary for this job."],
   },
   postingDate: {
     type: Date,
