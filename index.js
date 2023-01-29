@@ -8,6 +8,13 @@ const PORT = process.env.PORT;
 const dbConnection = require("./config/database");
 const errorMiddleware = require("./middleware/errors");
 
+//handling uncaught expection
+process.on("uncaughtException", (err) => {
+  console.log(`Error: ${err.message}`);
+  console.log("Shutting down due to uncaught expection.");
+  process.exit(1);
+});
+
 // setup body parser
 app.use(express.json());
 
