@@ -8,7 +8,7 @@ class APIFilter {
     const queryCopy = { ...this.queryStr };
 
     //removing fields from query
-    const removeFields = ["sort", "fields", "q"];
+    const removeFields = ["sort", "fields", "q", "limit", "page"];
     removeFields.forEach((el) => delete queryCopy[el]);
 
     // advance filter using: lt, lte, gt, gte
@@ -48,6 +48,14 @@ class APIFilter {
     }
 
     return this;
+  }
+
+  pagination() {
+    const page = parseInt(this.queryStr.page, 10) || 1;
+    const limit = parseInt(this.queryStr.limit, 10) || 10;
+    const skipResults = (page - 1) * limit;
+
+    this.query = this.query.skip(skipResults).limit(limit);
   }
 }
 
