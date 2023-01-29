@@ -8,7 +8,7 @@ class APIFilter {
     const queryCopy = { ...this.queryStr };
 
     //removing fields from query
-    const removeFields = ["sort"];
+    const removeFields = ["sort", "fields"];
     removeFields.forEach((el) => delete queryCopy[el]);
 
     // advance filter using: lt, lte, gt, gte
@@ -30,6 +30,15 @@ class APIFilter {
     }
 
     return this;
+  }
+
+  limitFields() {
+    if (this.queryStr.fields) {
+      const fields = this.queryStr.fields.split(",").join(" ");
+      this.query = this.query.select(fields);
+    } else {
+      this.query = this.query.select("-__v");
+    }
   }
 }
 
