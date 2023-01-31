@@ -45,4 +45,12 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   if (!passwordMatch) {
     return next(new ErrorHandler("Please enter email or password"), 401);
   }
+
+  // create web token
+  const token = user.getJwtToken();
+
+  res.status(200).json({
+    success: false,
+    token,
+  });
 });
