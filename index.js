@@ -4,6 +4,7 @@ dotenv = require("dotenv");
 dotenv.config();
 const PORT = process.env.PORT;
 const errorHandler = require("./utils/errorHandler");
+const cookieParse = require("cookie-parser");
 
 //DB CONNECTION
 const dbConnection = require("./config/database");
@@ -18,6 +19,8 @@ process.on("uncaughtException", (err) => {
 
 // setup body parser
 app.use(express.json());
+
+app.use(cookieParse);
 
 // Import routers
 const jobs = require("./routes/jobs");
