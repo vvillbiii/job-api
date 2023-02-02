@@ -12,13 +12,18 @@ const {
   jobStats,
 } = require("../controllers/jobsController");
 
+const isAuthenticatedUser = require("../middleware/auth");
+
 router.route("/jobs").get(getJobs);
 
 router.route("/jobs/:id/:slug").get(getJob);
 router.route("/jobs/:zipcode/:distance").get(getJobsInRadius);
-router.route("/jobs/new").post(newJob);
+router.route("/jobs/new").post(isAuthenticatedUser, newJob);
 router.route("/stats/:topic").get(jobStats);
 
-router.route("/jobs/:id").put(updateJob).delete(deleteJob);
+router
+  .route("/jobs/:id")
+  .put(isAuthenticatedUser, updateJob)
+  .delete(isAuthenticatedUser, deleteJob);
 
 module.exports = router;
