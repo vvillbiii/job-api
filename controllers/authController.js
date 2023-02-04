@@ -2,6 +2,7 @@ const User = require("../models/users");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/errorHandler");
 const sendToken = require("../utils/jwtToken");
+const sendEmail = require("../utils/sendEmail");
 
 // Register a new user => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
@@ -56,4 +57,31 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const resetToken = user.getPasswordReset();
 
   await user.save({ validateBeforeSave: false });
+
+  // create reset password url
+  const resetURL = `${req.protocol}://${req.get(
+    "host"
+  )}/api/v1/password/reset/${resetToken}`;
+
+  const message = `Your password reset link is: \n\n${resetURL} \n\n\ If have not request this, then this message.`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: "Remote Work API password recovery",
+      message,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Email sent successfully to: ${user.email} `,
+    });
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    return next(new ErrorHandler("Email is not sent."), 500);
+  }
 });
