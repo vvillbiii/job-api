@@ -25,9 +25,11 @@ app.use(cookieParse);
 // Import routers
 const jobs = require("./routes/jobs");
 const auth = require("./routes/auth");
+const user = require("./routes/user");
 
 app.use("/api/v1", jobs);
 app.use("/api/v1", auth);
+app.use("/api/v1", user);
 
 // handle unhandled routes
 app.all("*", (req, res, next) => {
