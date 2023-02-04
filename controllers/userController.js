@@ -27,3 +27,21 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 
   sendToken(user, 200, res);
 });
+
+//update current user data => /api/v1/me/update
+exports.updateUser = catchAsyncErrors(async (req, res, next) => {
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
