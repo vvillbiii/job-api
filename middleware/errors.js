@@ -47,6 +47,12 @@ module.exports = (err, req, res, next) => {
     error = new ErrorHandler(message, 500);
   }
 
+  //handling expireed jwt token error
+  if (err.name === "TokenExpiredError") {
+    const message = "JSON Web token is expired. Please try again.";
+    error = new ErrorHandler(message, 500);
+  }
+
   err.message = err.message || "Internal Server Error.";
 
   res.status(err.statusCode).json({
