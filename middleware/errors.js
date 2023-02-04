@@ -41,6 +41,12 @@ module.exports = (err, req, res, next) => {
     });
   }
 
+  //handling wrong jwt token error
+  if (err.name === "JsonWebTokenError") {
+    const message = "JSON Web token is invaild. Try again,";
+    error = new ErrorHandler(message, 500);
+  }
+
   err.message = err.message || "Internal Server Error.";
 
   res.status(err.statusCode).json({
