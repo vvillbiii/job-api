@@ -6,6 +6,8 @@ const PORT = process.env.PORT;
 const errorHandler = require("./utils/errorHandler");
 const cookieParse = require("cookie-parser");
 
+const fileupload = require("express-fileupload");
+
 //DB CONNECTION
 const dbConnection = require("./config/database");
 const errorMiddleware = require("./middleware/errors");
@@ -20,7 +22,11 @@ process.on("uncaughtException", (err) => {
 // setup body parser
 app.use(express.json());
 
+//setup cookie parser
 app.use(cookieParse);
+
+//setup file uploads
+app.use(fileupload());
 
 // Import routers
 const jobs = require("./routes/jobs");
