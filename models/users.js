@@ -5,39 +5,45 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-const userSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, "Please enter your name."],
-  },
-  email: {
-    type: String,
-    required: [true, "Please enter your email address"],
-    unique: true,
-    validate: [validator.email, "Please enter valid email address."],
-  },
-  role: {
-    type: String,
-    enum: {
-      values: ["user", "employer"],
-      message: "Please select correct role.",
+const userSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Please enter your name."],
     },
-    default: "user",
-  },
-  password: {
-    type: String,
-    required: [true, "Please enter password for your account."],
-    minlength: [8, "Your password must be 8 at least characters long"],
+    email: {
+      type: String,
+      required: [true, "Please enter your email address"],
+      unique: true,
+      validate: [validator.email, "Please enter valid email address."],
+    },
+    role: {
+      type: String,
+      enum: {
+        values: ["user", "employer"],
+        message: "Please select correct role.",
+      },
+      default: "user",
+    },
+    password: {
+      type: String,
+      required: [true, "Please enter password for your account."],
+      minlength: [8, "Your password must be 8 at least characters long"],
 
-    select: false,
+      select: false,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 //Encrypting password before saving
 userSchema.pre("save", async function (next) {
@@ -75,6 +81,14 @@ userSchema.methods.getPasswordReset = function () {
 
   return resetToken;
 };
+
+//show all jobs created by user
+userSchema.virtual("jobPublished", {
+  ref: "Job",
+  localField: "_id",
+  foreignField: "user",
+  justOne: false,
+});
 
 const User = mongoose.model("User", userSchema);
 
