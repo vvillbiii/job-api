@@ -3,6 +3,7 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
 const Job = require("../models/jobs");
+const fs = require("fs");
 
 //get current user profile => /api/v1/me
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
@@ -53,6 +54,8 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
 
 //delete current user => /api/v1/me/delete
 exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
+  deleteUserData(req.user.id, req.user.role);
+
   const user = await User.findByIdAndDelete(req.user.id);
 
   res.cookie("token", "none", {
@@ -67,11 +70,33 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
 });
 
 //delete user data
-async function deleteUserDate(user, role) {
+async function deleteUserData(user, role) {
   if (role === "employer") {
     await Job.deleteMany({ user: user });
   }
 
   if (role === "user") {
+    const appliedJobs = await Job.find({ "applicantsApplied.id": user }).select(
+      "+applicantsApplied"
+    );
+
+    for (let i = 0; i < appliedJobs.length; i++) {
+      let obj = appliedJobs[i].applicantsApplied.find((o) => o.id === user);
+
+      let filepath = `${__dirname}/public/uploads/${obj.resume}`.replace(
+        "\\controllers",
+        ""
+      );
+
+      fs.unlink(filepath, (err) => {
+        if (err) return console.log(err);
+      });
+
+      appliedJobs[i].applicantsApplied.splice(
+        appliedJobs[i].applicantsApplied.indexOf(obj.id)
+      );
+
+      appliedJobs[i].save();
+    }
   }
 }
