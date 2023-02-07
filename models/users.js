@@ -83,7 +83,7 @@ userSchema.methods.getPasswordReset = function () {
 };
 
 //show all jobs created by user
-userSchema.virtual("jobPublished", {
+userSchema.virtual("jobsPublished", {
   ref: "Job",
   localField: "_id",
   foreignField: "user",
