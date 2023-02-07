@@ -2,6 +2,7 @@ const User = require("../models/users");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
+const Job = require("../models/jobs");
 
 //get current user profile => /api/v1/me
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
@@ -64,3 +65,13 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
     message: "Your account has been deleted.",
   });
 });
+
+//delete user data
+async function deleteUserDate(user, role) {
+  if (role === "employer") {
+    await Job.deleteMany({ user: user });
+  }
+
+  if (role === "user") {
+  }
+}
