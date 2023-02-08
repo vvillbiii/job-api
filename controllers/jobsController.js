@@ -56,6 +56,7 @@ exports.getJob = catchAsyncErrors(async (req, res, next) => {
     data: job,
   });
 });
+
 // updating a job => /api/v1/jobs/:id
 exports.updateJob = catchAsyncErrors(async (req, res, next) => {
   const id = req.params.id;
@@ -63,6 +64,16 @@ exports.updateJob = catchAsyncErrors(async (req, res, next) => {
 
   if (!job) {
     return next(new ErrorHandler("Job not found.", 404));
+  }
+
+  // check if the user is owner
+  if (job.user.toString() !== req.user.id && req.user.role !== "admin") {
+    return next(
+      new ErrorHandler(
+        `User(${req.user.id}) is not allowed to update this job.`,
+        400
+      )
+    );
   }
 
   job = await Job.findByIdAndUpdate(id, req.body, {
@@ -84,6 +95,16 @@ exports.deleteJob = catchAsyncErrors(async (req, res, next) => {
 
   if (!job) {
     return next(new ErrorHandler("Job not found.", 404));
+  }
+
+  // check if the user is owner
+  if (job.user.toString() !== req.user.id && req.user.role !== "admin") {
+    return next(
+      new ErrorHandler(
+        `User(${req.user.id}) is not allowed to delete this job.`,
+        400
+      )
+    );
   }
 
   job = await Job.findByIdAndDelete(id);
