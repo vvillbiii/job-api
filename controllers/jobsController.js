@@ -42,7 +42,10 @@ exports.newJob = catchAsyncErrors(async (req, res, next) => {
 exports.getJob = catchAsyncErrors(async (req, res, next) => {
   const id = req.params.id;
   const slug = req.params.slug;
-  const job = await Job.find({ $and: [{ _id: id }, { slug: slug }] });
+  const job = await Job.find({ $and: [{ _id: id }, { slug: slug }] }).populate({
+    path: "user",
+    select: "name",
+  });
 
   if (!job || job.length === 0) {
     return next(new ErrorHandler("Job not found.", 404));
