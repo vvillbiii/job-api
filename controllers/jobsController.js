@@ -4,6 +4,7 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const APIFilter = require("../utils/apiFilter");
 const path = require("path");
+const fs = require("fs");
 
 // Get all jobs => for /api/v1/jobs
 exports.getJobs = catchAsyncErrors(async (req, res, next) => {
@@ -91,7 +92,7 @@ exports.updateJob = catchAsyncErrors(async (req, res, next) => {
 // delete a job => /api/v1/jobs/:id
 exports.deleteJob = catchAsyncErrors(async (req, res, next) => {
   const id = req.params.id;
-  let job = await Job.findById(id);
+  let job = await Job.findById(id).select("+applicantsApplied");
 
   if (!job) {
     return next(new ErrorHandler("Job not found.", 404));
@@ -105,6 +106,20 @@ exports.deleteJob = catchAsyncErrors(async (req, res, next) => {
         400
       )
     );
+  }
+
+  //deleting files associated with job
+
+  for (let i = 0; i < job.applicantsApplied.length; i++) {
+    let filepath =
+      `${__dirname}/public/uploads/${job.applicantsApplied[i].resume}`.replace(
+        "\\controllers",
+        ""
+      );
+
+    fs.unlink(filepath, (err) => {
+      if (err) return console.log(err);
+    });
   }
 
   job = await Job.findByIdAndDelete(id);
