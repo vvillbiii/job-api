@@ -8,6 +8,8 @@ const cookieParse = require("cookie-parser");
 
 const fileupload = require("express-fileupload");
 
+const rateLimit = require("express-rate-limit");
+
 //DB CONNECTION
 const dbConnection = require("./config/database");
 const errorMiddleware = require("./middleware/errors");
@@ -27,6 +29,15 @@ app.use(cookieParse);
 
 //setup file uploads
 app.use(fileupload());
+
+// rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+});
+
+// Apply the rate limiting middleware to all requests
+app.use(limiter);
 
 // Import routers
 const jobs = require("./routes/jobs");
