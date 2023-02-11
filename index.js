@@ -12,6 +12,7 @@ const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xssClean = require("xss-clean");
+const hpp = require("hpp");
 
 //DB CONNECTION
 const dbConnection = require("./config/database");
@@ -41,6 +42,9 @@ app.use(mongoSanitize());
 
 //prevent xss attacks
 app.use(xssClean);
+
+//prevent parameter pollution attacks
+app.use(hpp());
 
 // rate limiting
 const limiter = rateLimit({
