@@ -10,6 +10,8 @@ const fileupload = require("express-fileupload");
 
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
+const mongoSanitize = require("express-mongo-sanitize");
+const xssClean = require("xss-clean");
 
 //DB CONNECTION
 const dbConnection = require("./config/database");
@@ -22,6 +24,9 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
+//setup security headers
+app.use(helmet());
+
 // setup body parser
 app.use(express.json());
 
@@ -31,8 +36,11 @@ app.use(cookieParse);
 //setup file uploads
 app.use(fileupload());
 
-//setup security headers
-app.use(helmet());
+//sanitize data
+app.use(mongoSanitize());
+
+//prevent xss attacks
+app.use(xssClean);
 
 // rate limiting
 const limiter = rateLimit({
