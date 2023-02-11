@@ -13,6 +13,7 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xssClean = require("xss-clean");
 const hpp = require("hpp");
+const cors = require("cors");
 
 //DB CONNECTION
 const dbConnection = require("./config/database");
@@ -54,6 +55,9 @@ const limiter = rateLimit({
 
 // Apply the rate limiting middleware to all requests
 app.use(limiter);
+
+//setup cors and accessible by other domains
+app.use(cors());
 
 // Import routers
 const jobs = require("./routes/jobs");
