@@ -9,6 +9,7 @@ const cookieParse = require("cookie-parser");
 const fileupload = require("express-fileupload");
 
 const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 
 //DB CONNECTION
 const dbConnection = require("./config/database");
@@ -29,6 +30,9 @@ app.use(cookieParse);
 
 //setup file uploads
 app.use(fileupload());
+
+//setup security headers
+app.use(helmet());
 
 // rate limiting
 const limiter = rateLimit({
