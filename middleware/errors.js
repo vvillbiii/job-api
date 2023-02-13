@@ -35,28 +35,28 @@ module.exports = (err, req, res, next) => {
       error = new ErrorHandler(message, 404);
     }
 
+    //handling wrong jwt token error
+    if (err.name === "JsonWebTokenError") {
+      const message = "JSON Web token is invaild. Try again,";
+      error = new ErrorHandler(message, 500);
+    }
+
+    //handling expireed jwt token error
+    if (err.name === "TokenExpiredError") {
+      const message = "JSON Web token is expired. Please try again.";
+      error = new ErrorHandler(message, 500);
+    }
+
     res.status(error.statusCode).json({
       success: false,
       message: error.message || "Internal Server Error.",
     });
   }
 
-  //handling wrong jwt token error
-  if (err.name === "JsonWebTokenError") {
-    const message = "JSON Web token is invaild. Try again,";
-    error = new ErrorHandler(message, 500);
-  }
+  // err.message = err.message || "Internal Server Error.";
 
-  //handling expireed jwt token error
-  if (err.name === "TokenExpiredError") {
-    const message = "JSON Web token is expired. Please try again.";
-    error = new ErrorHandler(message, 500);
-  }
-
-  err.message = err.message || "Internal Server Error.";
-
-  res.status(err.statusCode).json({
-    success: false,
-    message: err.message,
-  });
+  // res.status(err.statusCode).json({
+  //   success: false,
+  //   message: err.message,
+  // });
 };
