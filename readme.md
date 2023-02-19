@@ -17,7 +17,7 @@ The API provides the following endpoints:
 
 ### Jobs
 
-- GeET /jobs - get all jobs
+- GET /jobs - get all jobs
 - GET /jobs/:id/:slug - get job by id and slug
 - GET /jobs/:zipcode/:distance - get jobs in radius
 - POST /jobs/new - create a new job
