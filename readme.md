@@ -33,3 +33,12 @@ The API provides the following endpoints:
 - POST /password/forgot - forgot password
 - PUT /password/rest/:token - reset password
 - GET /logout - log out user
+
+### User
+
+- GET /me - user profile
+- GET /jobs/applied - jobs user applied to
+- GET /jobs/published - jobs published by employer
+- PUT /me/update - Update user profile
+- PUT /passsword/update - update user password
+- PUT /me/delete - delete user profile
