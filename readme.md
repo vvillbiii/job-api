@@ -10,3 +10,18 @@ To run the API locally, follow the steps below:
 - Install the dependencies with npm install
 - Start the server with npm start
 - Open your web browser and go to http://localhost:3000
+
+## API Endpoints
+
+The API provides the following endpoints:
+
+### Jobs
+
+- GeET /jobs - get all jobs
+- GET /jobs/:id/:slug - get job by id and slug
+- GET /jobs/:zipcode/:distance - get jobs in radius
+- POST /jobs/new - create a new job
+- GET /stats/:topic - get job stats
+- PUT /jobs/:id/apply - apply to job by id
+- PUT /jobs/:id - update job by id
+- DELETE /jobs/:id - delete job by id
