@@ -25,3 +25,11 @@ The API provides the following endpoints:
 - PUT /jobs/:id/apply - apply to job by id
 - PUT /jobs/:id - update job by id
 - DELETE /jobs/:id - delete job by id
+
+### Auth
+
+- POST /register - register new user
+- POST /login - login user
+- POST /password/forgot - forgot password
+- PUT /password/rest/:token - reset password
+- GET /logout - log out user
